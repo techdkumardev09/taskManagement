@@ -2,7 +2,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "http://localhost:8082/api";
 
 interface Task {
   title: string;
@@ -12,7 +12,7 @@ interface Task {
 export const authService = {
   login: async (email: string, password: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+      const response = await axios.post(`${API_BASE_URL}/users/login`, {
         email,
         password,
       });
@@ -24,7 +24,7 @@ export const authService = {
 
   signup: async (name: string, email: string, password: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/register`, {
+      const response = await axios.post(`${API_BASE_URL}/users/signup`, {
         name,
         email,
         password,
@@ -37,7 +37,7 @@ export const authService = {
 
   getUserProfile: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/auth/user-details`, {
+      const response = await axios.get(`${API_BASE_URL}/user-details`, {
         headers: {
           Authorization: localStorage.getItem("jwtToken"),
         },
