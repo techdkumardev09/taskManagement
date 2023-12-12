@@ -5,5 +5,6 @@ import userController from "../controller/userController";
 const userRouters = express.Router();
 
 userRouters.post("/signup", userMiddleware, userController.signUp);
+userRouters.post("/login", userMiddleware, userController.login);
 
 export default userRouters;

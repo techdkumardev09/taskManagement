@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/userModel";
+import jwt from "jsonwebtoken";
 
 export type RequestType = {
   username: string;
@@ -31,6 +32,38 @@ const userController = {
         .send({ data: "User has been created Successfully!!" });
     } catch (error) {
       return res.status(500).json({ errorMessage: "Something went wrong" });
+    }
+  },
+  async login(req: Request<RequestType>, res: any) {
+    const { username, password } = req.body;
+    try {
+      const user = await User.findOne({ username: username });
+      if (!user)
+        return res
+          .status(404)
+          .json({ errorMessage: "Username does not exists" });
+      const isPasswordChecked = await bcrypt.compare(password, user.password);
+  
+      if (!isPasswordChecked) {
+        return res
+          .status(404)
+          .json({ errorMessage: "Password does not matched" });
+      }
+      const token = jwt.sign({ username }, `${process.env.JWT_TOKEN}`, {
+        expiresIn: "5h",
+      });
+  
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          expiresIn: "10h",
+        })
+        .status(200)
+        .json({ token });
+    } catch (err) {
+      console.log("Check error", err);
+  
+      res.status(500).json(err);
     }
   },
 };
