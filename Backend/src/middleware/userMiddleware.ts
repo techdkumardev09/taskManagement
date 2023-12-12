@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { RequestType } from "../controller/userController";
 
-export const userMiddleware = async (req: Request<RequestType>, res :Response, next : NextFunction) => {
+export const userMiddleware = async (
+  req: Request<RequestType>,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { username, password } = req.body;
     if (!username || username === "")

@@ -43,7 +43,7 @@ const userController = {
           .status(404)
           .json({ errorMessage: "Username does not exists" });
       const isPasswordChecked = await bcrypt.compare(password, user.password);
-  
+
       if (!isPasswordChecked) {
         return res
           .status(404)
@@ -52,7 +52,7 @@ const userController = {
       const token = jwt.sign({ username }, `${process.env.JWT_TOKEN}`, {
         expiresIn: "5h",
       });
-  
+
       res
         .cookie("access_token", token, {
           httpOnly: true,
@@ -62,7 +62,7 @@ const userController = {
         .json({ token });
     } catch (err) {
       console.log("Check error", err);
-  
+
       res.status(500).json(err);
     }
   },
