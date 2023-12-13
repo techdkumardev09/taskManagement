@@ -5,7 +5,6 @@ import Home from "./pages/Home";
 
 import NotFound from "./pages/404";
 import { useSelector } from "react-redux";
-import ViewTask from "./pages/ViewTask";
 import Profile from "./pages/profile";
 import SignUp from "./components/Auth/SignUp";
 import LoginPage from "./components/Auth/Login";
@@ -28,7 +27,6 @@ const AppRoutes = () => {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/signin" element={<LoginPage />} />
       <Route path="/profile" element={isAuthenticated || isUserAuthenticated ? <Profile /> : <Navigate to="/signin" />} />
-      <Route path="/view-task/:taskId" element={isAuthenticated || isUserAuthenticated ? <ViewTask /> : <Navigate to="/signin" />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

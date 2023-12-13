@@ -1,10 +1,10 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document, now } from "mongoose";
 
 interface ITask extends Document {
   title: string;
   description: string;
-  dueDate: Date;
-  completed: boolean;
+  userEmail: String;
+  createdAt: Date;
 }
 
 const taskSchema = new mongoose.Schema<ITask>({
@@ -15,13 +15,14 @@ const taskSchema = new mongoose.Schema<ITask>({
   description: {
     type: String,
   },
-  dueDate: {
-    type: Date,
+  userEmail: {
+    type: String,
     required: true,
+    ref: "User",
   },
-  completed: {
-    type: Boolean,
-    default: false,
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
 });
 

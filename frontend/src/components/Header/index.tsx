@@ -24,10 +24,6 @@ const Header: React.FC = () => {
     navigate("/signin");
   };
 
-  const openProfile = () => {
-    navigate("/profile");
-    setDropdownOpen(false);
-  };
 
   const getFirstLetter = (email: string) => {
     return email ? email[0].toUpperCase() : "";
@@ -47,28 +43,17 @@ const Header: React.FC = () => {
         {isAuthenticated || isUserAuthenticated ? (
           <div className="flex justify-center items-center relative">
             <p className="ml-2 text-white mr-2 hidden sm:inline">
-              Welcome, {getUser()?.user?.name}
+              Welcome, {getUser()?.data?.name}
             </p>
             <div
               onClick={toggleDropdown}
               className="cursor-pointer rounded-full w-8 h-8 bg-white shadow-sm flex items-center justify-center text-blue-800 text-xl font-bold ml-3"
             >
-              {getUser() !== null && getFirstLetter(getUser()?.user?.name)}
+              {getUser() !== null && getFirstLetter(getUser()?.data?.name)}
             </div>
             {isDropdownOpen && (
               <div className="absolute top-12 right-0 bg-white border rounded shadow-md w-48 z-50">
                 <ul>
-                  <li
-                    className="p-4 pl-6 cursor-pointer flex gap-4 text-lg items-center"
-                    onClick={openProfile}
-                  >
-                    <img
-                      alt="profile"
-                      src={allImages.userProfile}
-                      className="w-6 h-6"
-                    ></img>
-                    Profile
-                  </li>
                   <li
                     className=" p-4 pl-6 flex gap-4 text-lg cursor-pointer border-b border-gray-100 items-center"
                     onClick={handleLogout}

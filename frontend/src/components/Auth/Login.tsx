@@ -14,7 +14,6 @@ import {
 import { authService } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { buttonType } from "../../utils/constants";
-import { getUserProfileRequest } from "../../redux/actions/taskActions";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -41,28 +40,16 @@ const LoginPage = () => {
         dispatch(loginSuccess(response.data));
         localStorage.setItem(
           "jwtToken",
-          JSON.stringify(`Bearer ${response.data.token}`)
+          JSON.stringify(`${response.data.token}`)
         );
         toast.success(`${response.data.message}`);
-        getUserProfile();
-      }
-    } catch (error: any) {
-      dispatch(loginFailure(error.message));
-    }
-  };
-
-  const getUserProfile = async () =>{
-    try {
-      const response = await authService.getUserProfile();
-      if (response.success) {
-        dispatch(getUserProfileRequest(response?.data));
-        localStorage.setItem("user", JSON.stringify(response.data));
+        localStorage.setItem("user", JSON.stringify(response));
         navigate("/");
       }
     } catch (error: any) {
       dispatch(loginFailure(error.message));
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center py-6 mt-10">

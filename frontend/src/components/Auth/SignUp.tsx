@@ -37,10 +37,10 @@ const SignUp = () => {
     dispatch(signupRequest());
     try {
       const response = await authService.signup(values.name, values.email, values.password);
-
-      if (response.success) {
+      
+      if (response.data) {
         dispatch(signupSuccess(response.data));
-        toast.success(`${response.data.message}`);
+        toast.success(`${response.data}`);
         navigate("/signin");
       }
 

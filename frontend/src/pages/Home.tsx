@@ -23,10 +23,10 @@ import Heading from "../components/Heading";
 import NodataFound from "../components/NodataFound";
 
 interface Task {
-  id: number;
+  _id: number;
   title: string;
   description: string;
-  created_at: string;
+  createdAt: string;
 }
 
 const Home = () => {
@@ -47,23 +47,25 @@ const Home = () => {
 
   useEffect(() => {
     getTaskApi();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getTaskApi = async () => {
     dispatch(getTasks());
     const response = await taskService.getTasksApi();
-    setTaskList(response?.data?.tasks);
+    setTaskList(response?.tasks);
     dispatch(deleteTaskSuccess(response));
     navigate("/");
   };
 
   const handleDelete = async (id: number) => {
+
     dispatch(deleteTask());
     try {
       const response = await taskService.deleteTaskApi(id);
       dispatch(deleteTaskSuccess(response));
       getTaskApi();
+      toast.success(`${response.message}`);
       setIsOpenDeleteModal(false);
       navigate("/");
     } catch (error: any) {
@@ -83,8 +85,8 @@ const Home = () => {
     if (isEdit && id !== undefined) {
       const res = await taskService.getTaskDetails(id);
       setEditTaskForm({
-        title: res?.data?.task?.title,
-        description: res?.data?.task?.description,
+        title: res?.title,
+        description: res?.description,
       });
     }
 
@@ -103,10 +105,10 @@ const Home = () => {
     try {
       if (onEditState) {
         const response = await taskService.editTask({ ...task, id: taskId });
-        if (response.success) {
-          dispatch(addTaskSuccess(response.data));
+        if (response.status) {
+          dispatch(addTaskSuccess(response.task));
           getTaskApi();
-          toast.success(`${response.data.message}`);
+          toast.success(`${response.message}`);
           navigate("/");
           setIsOpenTaskModal(false);
           resetForm();
@@ -114,10 +116,10 @@ const Home = () => {
         return;
       }
       const response = await taskService.addTaskApi(task);
-      if (response.success) {
-        dispatch(addTaskSuccess(response.data));
+      if (response.status) {
+        dispatch(addTaskSuccess(response));
         getTaskApi();
-        toast.success(`${response.data.message}`);
+        toast.success(response.message);
         navigate("/");
         setIsOpenTaskModal(false);
         resetForm();
@@ -139,21 +141,23 @@ const Home = () => {
         </button>
       </div>
       <div className="max-w-[1240px] mx-auto">
+
         <div className="flex flex-wrap items-center">
+
           {taskList?.length === 0 ? (
             <NodataFound />
           ) : (
             taskList?.length > 0 &&
             taskList?.map((task) => (
-              <TaskListCard
-                id={task?.id}
-                key={task?.id}
-                title={task?.title}
-                description={task?.description}
-                dueDate={task?.created_at}
-                isOpenDeleteModal={openisOpenDeleteModal}
-                showTaskModal={showTaskModal}
-              />
+                <TaskListCard
+                  id={task?._id}
+                  key={task?._id}
+                  title={task?.title}
+                  description={task?.description}
+                  dueDate={task?.createdAt}
+                  isOpenDeleteModal={openisOpenDeleteModal}
+                  showTaskModal={showTaskModal}
+                />
             ))
           )}
         </div>

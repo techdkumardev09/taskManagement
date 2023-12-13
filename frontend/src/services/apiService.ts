@@ -28,10 +28,10 @@ export const authService = {
         name,
         email,
         password,
-      });
+      });   
       return response.data;
     } catch (error: any) {
-      toast.error(error.response.data.data.message)
+      toast.error(error.response.data.errorMessage)
     }
   },
 
@@ -107,13 +107,14 @@ export const taskService = {
     }
   },
 
-  deleteTaskApi: async (taskId: number): Promise<void> => {
+  deleteTaskApi: async (taskId: number) => {
     try {
-      await axios.delete(`${API_BASE_URL}/task/${taskId}`, {
+      const response = await axios.delete(`${API_BASE_URL}/task/${taskId}`, {
         headers: {
           Authorization: localStorage.getItem("jwtToken"),
         },
       });
+      return response.data;
     } catch (error) {
       throw new Error("Delete task failed");
     }

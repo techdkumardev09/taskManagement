@@ -7,8 +7,8 @@ export const userMiddleware = async (
   next: NextFunction
 ) => {
   try {
-    const { username, password } = req.body;
-    if (!username || username === "")
+    const { email, password } = req.body;
+    if (!email || email === "")
       return res
         .status(404)
         .json({ errorMessage: "Username can not be blank" });

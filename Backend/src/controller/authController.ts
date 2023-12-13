@@ -6,18 +6,16 @@ import User from "../models/userModel";
 // Create an array to store revoked tokens
 const tokenBlacklist = [];
 
-console.log(process.env.JWT_TOKEN, "code");
-
 type RequestType = {
-  username: string;
+  email: string;
   password: string;
 };
 
 const authController = {
   async login(req: Request<RequestType>, res: any) {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
-      const user:any = await User.findOne({ username: username });
+      const user:any = await User.findOne({ email: email });
       const isPasswordChecked = await bcrypt.compare(password,user.password);
 
       if (!isPasswordChecked) {
@@ -25,7 +23,7 @@ const authController = {
           .status(404)
           .json({ errorMessage: "password is not matched" });
       }
-      const token = jwt.sign({ username }, `${process.env.JWT_TOKEN}`, {
+      const token = jwt.sign({ email }, `${process.env.JWT_TOKEN}`, {
         expiresIn: "5h",
       });
 
